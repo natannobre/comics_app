@@ -4,7 +4,7 @@ class HomeController < ApplicationController
   before_action :list_all_comics, only: [:index]
 
   def index
-    @title = "Marvel Comics"
+    @paginatable_array = Kaminari.paginate_array(@comics_infos).page(params[:page]).per(15)
   end
 
   private
@@ -33,5 +33,4 @@ class HomeController < ApplicationController
 
       "#{path}/#{variant_name}.#{extension}"
     end
-
 end
