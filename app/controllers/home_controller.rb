@@ -13,8 +13,11 @@ class HomeController < ApplicationController
 
       @comics_infos = []
       @comics[:data][:results].each do |comic|
+        path = build_image_path(comic)
+        next if path.include?("image_not_available")
+
         @comics_infos << {
-                          path: build_image_path(comic),
+                          path: path,
                           title: comic[:title],
                           date: comic[:dates][0][:date]
                         }
