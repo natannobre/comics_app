@@ -1,0 +1,11 @@
+<div class="container">
+	<h1 class='font-color'><%= @title %></h1>
+
+	<%= render partial: "home/components/card", locals: {image_src: @image_src} %>
+</div>
+
+<style>
+	.font-color {
+		color: #fff; 
+	}
+</style>
