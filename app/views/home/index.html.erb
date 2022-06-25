@@ -1,22 +1,8 @@
-<div class="container">
-	<div class="row row-cols-1 row-cols-sm-2 row-cols-md-5 g-3">
-		<% @paginatable_array.each do |comic| %>
-			<%= render partial: "home/components/card", locals: {image_src: comic[:path], title: comic[:title]} %>
-		<% end %>
-	</div>
-	<div class="mx-auto mt-3">
-		<%= paginate @paginatable_array %>
-	</div>
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-5 g-3">
+	<% @paginatable_array.each do |comic| %>
+		<%= render partial: "home/components/card", locals: {image_src: comic[:path], title: comic[:title]} %>
+	<% end %>
 </div>
-
-<style>
-	.font-color {
-		color: #fff; 
-	}
-
-	.center {
-    align-items: center !important;
-    margin: auto;
-    width: 30%;
-  }
-</style>
+<div class="mx-auto mt-3">
+	<%= paginate @paginatable_array %>
+</div>
