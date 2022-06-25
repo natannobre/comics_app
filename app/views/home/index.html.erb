@@ -1,8 +1,31 @@
 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-5 g-3">
-	<% @paginatable_array.each do |comic| %>
+	<% @comics.each do |comic| %>
 		<%= render partial: "home/components/card", locals: {image_src: comic[:path], title: comic[:title]} %>
 	<% end %>
 </div>
-<div class="mx-auto mt-3">
-	<%= paginate @paginatable_array %>
+<div class="mx-auto mt-4">
+	<nav>
+    <ul class="row justify-content-between ps-0">
+      <div class="col-3">
+        <%= button_to "PREVIOUS PAGE", prev_page_path(page: params[:page]), class: 'page-link' %>
+      </div>
+      <div class="col-3">
+        <%= button_to "NEXT PAGE", next_page_path(page: params[:page]), class: 'page-link' %>
+      </div>
+    </ul>
+  </nav>
 </div>
+
+<style>
+  .page-link {
+    color: #de0000;
+    text-align: center;
+    font-weight: bold;
+    font-size: 22px;
+		width: 100% !important;
+  }
+
+  .page-link:hover {
+    color: #ff3f3f;
+  }
+</style>
