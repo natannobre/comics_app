@@ -1,31 +1,22 @@
-# require 'digest'
+# frozen_string_literal: true
+
 class Comic
   include HTTParty
 
   @base_url = 'https://gateway.marvel.com'
-  @ts = Time.now.strftime('%m/%d/%Y')
-  @hash = Digest::MD5.hexdigest("#{@ts}#{ENV['MARVEL_PRIVATE_KEY']}#{ENV['MARVEL_PUBLIC_KEY']}")
 
-  def self.all
-    offset = 0
-    all_comics = []
-    loop do
-      response = HTTParty.get("#{@base_url}/v1/public/comics?ts=#{@ts}&apikey=#{ENV['MARVEL_PUBLIC_KEY']}&hash=#{@hash}&limit=100&offset=#{offset}")
-      all_comics.concat(response['data']['results'])
-      # break if response['data']['total'].to_i <= all_comics.length
-      break if all_comics.length >= 100 
+  def self.find_per_page(page: 1, per_page: 25)
+    offset = (page.to_i - 1) * per_page
+    response = HTTParty.get("#{@base_url}/v1/public/comics?#{MarvelAuthentication.credentials}&orderBy=-focDate&limit=#{per_page}&offset=#{offset}")
 
-      offset += 100
-    end
+    create_array_of_comics_infos(response['data']['results'])
+  end
 
-    # offset = page.nil? ? 0 : (page.to_i - 1) * comics_per_page
-    # response = HTTParty.get("#{@base_url}/v1/public/comics?ts=#{@ts}&apikey=#{ENV['MARVEL_PUBLIC_KEY']}&hash=#{@hash}&limit=#{comics_per_page+1}&offset=#{offset}")
-    # all_comics = response['data']['results']
-
+  private_class_method def self.create_array_of_comics_infos(all_comics)
     comics_infos = []
     all_comics.each do |comic|
       path = build_image_path(comic)
-      next if path.include?('image_not_available')
+      # next if path.include?('image_not_available')
 
       comics_infos << {
         path: path,
@@ -37,7 +28,7 @@ class Comic
     comics_infos
   end
 
-  def self.build_image_path(comic)
+  private_class_method def self.build_image_path(comic)
     path = comic['thumbnail']['path'] # || comic[:images][0][:path]
     variant_name = 'portrait_uncanny' # 300x450px
     extension = comic['thumbnail']['extension']
