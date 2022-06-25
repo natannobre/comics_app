@@ -2,7 +2,7 @@ class HomeController < ApplicationController
   before_action :check_page, only: [:index]
 
   def index
-    @comics = Comic.find_per_page(page: params[:page])
+    @comics = Comic.find_per_page(page: params[:page], per_page: @comics_per_page)
   end
 
   def next_page
@@ -20,6 +20,9 @@ class HomeController < ApplicationController
   private
 
   def check_page
-    params[:page] = 1 if params[:page].nil? || params[:page].to_i <= 0 || params[:page].to_i > 1048
+    @comics_per_page = 25
+    return unless params[:page].nil? || params[:page].to_i <= 0 || params[:page].to_i > (52_361 / @comics_per_page).to_i
+
+    params[:page] = 1 # default page
   end
 end

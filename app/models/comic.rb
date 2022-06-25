@@ -3,13 +3,15 @@
 class Comic
   include HTTParty
 
-  @base_url = 'https://gateway.marvel.com'
-
   def self.find_per_page(page: 1, per_page: 25)
-    offset = (page.to_i - 1) * per_page
-    response = HTTParty.get("#{@base_url}/v1/public/comics?#{MarvelAuthentication.credentials}&orderBy=-focDate&limit=#{per_page}&offset=#{offset}")
+    # GET https://gateway.marvel.com/v1/public/comics -> fetches list of comics
+    endpoint = '/v1/public/comics'
 
-    create_array_of_comics_infos(response['data']['results'])
+    offset = (page.to_i - 1) * per_page
+    response = HTTParty.get("#{MarvelAuthentication.base_url}#{endpoint}?#{MarvelAuthentication.credentials}&orderBy=-focDate&limit=#{per_page}&offset=#{offset}")
+    response_body = JSON.parse(response.body)
+
+    create_array_of_comics_infos(response_body['data']['results'])
   end
 
   private_class_method def self.create_array_of_comics_infos(all_comics)
