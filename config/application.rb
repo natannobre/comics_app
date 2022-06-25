@@ -18,5 +18,12 @@ module ComicsApp
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    config.before_configuration do
+      env_variables_path = File.join(Rails.root, 'config', 'env_variables.yml')
+      YAML.load(File.open(env_variables_path)).each do |key, value|
+        ENV[key.to_s] = value
+      end if File.exists?(env_variables_path)
+    end
   end
 end

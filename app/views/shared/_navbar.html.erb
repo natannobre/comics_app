@@ -1,12 +1,12 @@
 <nav id="navbar_top" class="navbar bg-navbar">
-  <div class="container-fluid">
-    <div class="navbar-elements mb-2">
-      <div class="navbar-elements mb-3 mt-2">
-          <%= image_tag("marvel_logo") %>
-      </div>
-      <form class="d-flex">
-        <input class="form-control me-2" type="search" placeholder="deadpool" aria-label="Search">
-      </form>
+  <div class="navbar-elements mb-2">
+    <div class="navbar-elements mb-3 mt-2">
+        <%= image_tag("marvel_logo") %>
+    </div>
+    <div>
+      <%= form_with url: search_character_path, method: :post do |form| %>
+        <%= form.text_field :name, placeholder: 'deadpool', class: "form-control me-2" %>
+      <% end %>
     </div>
   </div>
 </nav>
