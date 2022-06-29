@@ -10,6 +10,11 @@ class Character
     response_body = JSON.parse(response.body)
 
     build_character_infos(response_body['data']['results'][0]) if response_body['data']['results'].present?
+
+  rescue NoMethodError => e
+    Rails.logger.error "Error while fetching character: #{e.message}"
+
+    nil
   end
 
   private_class_method def self.build_character_infos(character)
