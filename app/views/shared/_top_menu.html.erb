@@ -1,0 +1,8 @@
+<div class="center gap-5 my-3">
+  <% if user_signed_in? %>
+    <%= button_to "Home", search_character_path, method: :post, class: "btn btn-secondary" %>  
+    <%= button_to "Sign out", destroy_user_session_path, method: :delete, class: "btn btn-secondary" %>
+  <% else %>
+    <%= button_to "Sign in", new_user_session_path, class: "btn btn-primary" %>
+  <% end %>
+</div>
