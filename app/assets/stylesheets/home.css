@@ -51,16 +51,7 @@
   opacity: 0.4;
 }
 
-.image-not-favourite {
-  display: block;
-  position: absolute;
-  top: 3%;
-  right: 3%;
-  z-index: 1;
-}
-
-.image-favourite {
-  display: none;
+.favorite-icon {
   position: absolute;
   top: 3%;
   right: 3%;
