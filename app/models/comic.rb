@@ -12,6 +12,11 @@ class Comic
     response_body = JSON.parse(response.body)
 
     build_comics_infos(response_body['data']['results'])
+
+  rescue NoMethodError => e
+    Rails.logger.error "Error while fetching comic: #{e.message}"
+
+    nil
   end
 
   def self.find_per_character(character: nil, page: 1, per_page: 25)
