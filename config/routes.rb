@@ -11,4 +11,6 @@ Rails.application.routes.draw do
   post '/(:page)/prev_page', to: 'home#prev_page', as: :prev_page
 
   post 'search_character/(:name)', to: 'home#search_character', as: :search_character
+  get '/add_favorite/:user_id/:comic_id(/:page)', to: 'home#add_favorite', as: :add_favorite
+  get '/remove_favorite/:user_id/:comic_id(/:page)', to: 'home#remove_favorite', as: :remove_favorite
 end

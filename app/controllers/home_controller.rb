@@ -33,6 +33,21 @@ class HomeController < ApplicationController
     redirect_to root_path
   end
 
+  def add_favorite
+    user = User.find(params[:user_id])
+    comic_id = params[:comic_id]
+    Upvote.find_or_create_by(user_id: user.id, comic_id: comic_id) if user.present? && comic_id.present?
+    redirect_to root_path(params[:page])
+  end
+
+  def remove_favorite
+    user = User.find(params[:user_id])
+    comic_id = params[:comic_id]
+    upvote = Upvote.find_by(user_id: user.id, comic_id: comic_id)
+    upvote.destroy if upvote.present?
+    redirect_to root_path(params[:page])
+  end
+
   private
 
   def check_page

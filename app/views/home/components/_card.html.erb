@@ -1,16 +1,40 @@
-<div class="col">
-  <div class="card shadow-sm">
-    <%# {{< placeholder width="100%" height="225" background="#55595c" color="#eceeef" class="card-img-top" text="Thumbnail" >}} %>
-    <img width="100%" height="100%" src="<%= image_src %>" class="card-img-top" alt="this is an image">
-    <div class="card-body min-height-7">
-      <p class="card-text"><%= title %></p>
-      <div class="d-flex justify-content-between align-items-center">
-        <%# <div class="btn-group">
-          <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-          <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-        </div>
-        <small class="text-muted">9 mins</small> %>
-      </div>
+<div class="container-fluid text-center">
+  <div class="col">
+    <div class="card shadow-sm container-img">
+      <%= image_tag image_src, width: "100%", height: "100%", class: "comic-image" %>
+      <a  id=<%= "not_favourite#{comic_id}" %> 
+          class="<%= favorite ? "d-none" : "d-block" %> favorite-icon"
+          href=<%= add_favorite_path(user_id:current_user.id, comic_id: comic_id, page: params[:page]) %>
+          onclick="upvote(<%= comic_id %>)">
+            <%= image_tag 'heart_off', size: "30x30" %> 
+      </a>
+      <a  id=<%= "favourite#{comic_id}" %> 
+          class="<%= favorite ? "d-block" : "d-none" %> favorite-icon"
+          href=<%= remove_favorite_path(user_id:current_user.id, comic_id: comic_id, page: params[:page]) %> 
+          onclick="upvote(<%= comic_id %>)">
+            <%= image_tag 'heart_on', size: "30x30" %>
+      </a>
+      <p class="comic-title comic-title-transition"><%= title %></p>
     </div>
   </div>
 </div>
+
+<script>
+  function upvote(id) {
+    console.log(id);
+    var not_favourite = document.getElementById("not_favourite".concat(id));
+    var favourite = document.getElementById("favourite".concat(id));
+
+    if (not_favourite.style.display === "none") {
+      not_favourite.style.display = "block";
+      favourite.style.display = "none";
+      console.log(not_favourite);
+      console.log(favourite);
+    } else {
+      not_favourite.style.display = "none";
+      favourite.style.display = "block";
+      console.log(not_favourite);
+      console.log(favourite);
+    }
+  }
+</script>

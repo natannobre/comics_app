@@ -37,6 +37,7 @@ class Comic
       # next if path.include?('image_not_available')
 
       comics_infos << {
+        id: comic['id'],
         path: path,
         title: comic['title'],
         date: comic['dates'][0]['date']
