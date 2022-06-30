@@ -8,11 +8,15 @@ class Comic
     endpoint = '/v1/public/comics'
 
     offset = (page.to_i - 1) * per_page
-    response = HTTParty.get("#{MarvelAuthentication.base_url}#{endpoint}?#{MarvelAuthentication.credentials}&orderBy=-focDate&limit=#{per_page}&offset=#{offset}")
-    response_body = JSON.parse(response.body)
+    # response = HTTParty.get("#{MarvelAuthentication.base_url}#{endpoint}?#{MarvelAuthentication.credentials}&orderBy=-focDate&limit=#{per_page}&offset=#{offset}")
+    # response_body = JSON.parse(response.body)
+
+    response_body = Rails.cache.fetch(["all_comics", page, per_page], expires_in: 24.hours) do
+      response = HTTParty.get("#{MarvelAuthentication.base_url}#{endpoint}?#{MarvelAuthentication.credentials}&orderBy=-focDate&limit=#{per_page}&offset=#{offset}")
+      JSON.parse(response.body)
+    end
 
     build_comics_infos(response_body['data']['results'])
-
   rescue NoMethodError => e
     Rails.logger.error "Error while fetching comic: #{e.message}"
 
@@ -24,10 +28,19 @@ class Comic
     endpoint = '/v1/public/comics'
 
     offset = (page.to_i - 1) * per_page
-    response = HTTParty.get("#{MarvelAuthentication.base_url}#{endpoint}?#{MarvelAuthentication.credentials}&characters=#{character}&orderBy=-focDate&limit=#{per_page}&offset=#{offset}")
-    response_body = JSON.parse(response.body)
+    # response = HTTParty.get("#{MarvelAuthentication.base_url}#{endpoint}?#{MarvelAuthentication.credentials}&characters=#{character}&orderBy=-focDate&limit=#{per_page}&offset=#{offset}")
+    # response_body = JSON.parse(response.body)
+
+    response_body = Rails.cache.fetch(["comics_per_character", page, per_page, character], expires_in: 24.hours) do
+      response = HTTParty.get("#{MarvelAuthentication.base_url}#{endpoint}?#{MarvelAuthentication.credentials}&characters=#{character}&orderBy=-focDate&limit=#{per_page}&offset=#{offset}")
+      JSON.parse(response.body)
+    end
 
     build_comics_infos(response_body['data']['results'])
+  rescue NoMethodError => e
+    Rails.logger.error "Error while fetching comic: #{e.message}"
+
+    nil
   end
 
   private_class_method def self.build_comics_infos(all_comics)

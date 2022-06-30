@@ -6,11 +6,15 @@ class Character
     endpoint = '/v1/public/characters'
 
     name = name.downcase
-    response = HTTParty.get("#{MarvelAuthentication.base_url}#{endpoint}?#{MarvelAuthentication.credentials}&name=#{name}")
-    response_body = JSON.parse(response.body)
+    # response = HTTParty.get("#{MarvelAuthentication.base_url}#{endpoint}?#{MarvelAuthentication.credentials}&name=#{name}")
+    # response_body = JSON.parse(response.body)
+
+    response_body = Rails.cache.fetch(["character_by_name", name], expires_in: 24.hours) do
+      response = HTTParty.get("#{MarvelAuthentication.base_url}#{endpoint}?#{MarvelAuthentication.credentials}&name=#{name}")
+      JSON.parse(response.body)
+    end
 
     build_character_infos(response_body['data']['results'][0]) if response_body['data']['results'].present?
-
   rescue NoMethodError => e
     Rails.logger.error "Error while fetching character: #{e.message}"
 
