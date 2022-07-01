@@ -51,7 +51,7 @@ This project is a simple web application that allows you to search for comics in
 
 ## Highlighted Approaches
 1. The entities __character__ and __comic__ were implemented based on ActiveRecord classes to make easier to manipulate and understand the objects.
-2. To help mitigate problems concerning external API rate limit, we cache API responses for 24 hours.
+2. To help mitigate problems concerning external API rate limit, API responses were cached for 24 hours.
 
 ## Next steps
 - Refactor the javascript to use turbo-links on upvote feature.
