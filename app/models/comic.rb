@@ -8,8 +8,6 @@ class Comic
     endpoint = '/v1/public/comics'
 
     offset = (page.to_i - 1) * per_page
-    # response = HTTParty.get("#{MarvelAuthentication.base_url}#{endpoint}?#{MarvelAuthentication.credentials}&orderBy=-focDate&limit=#{per_page}&offset=#{offset}")
-    # response_body = JSON.parse(response.body)
 
     response_body = Rails.cache.fetch(["all_comics", page, per_page], expires_in: 24.hours) do
       response = HTTParty.get("#{MarvelAuthentication.base_url}#{endpoint}?#{MarvelAuthentication.credentials}&orderBy=-focDate&limit=#{per_page}&offset=#{offset}")
@@ -28,8 +26,6 @@ class Comic
     endpoint = '/v1/public/comics'
 
     offset = (page.to_i - 1) * per_page
-    # response = HTTParty.get("#{MarvelAuthentication.base_url}#{endpoint}?#{MarvelAuthentication.credentials}&characters=#{character}&orderBy=-focDate&limit=#{per_page}&offset=#{offset}")
-    # response_body = JSON.parse(response.body)
 
     response_body = Rails.cache.fetch(["comics_per_character", page, per_page, character], expires_in: 24.hours) do
       response = HTTParty.get("#{MarvelAuthentication.base_url}#{endpoint}?#{MarvelAuthentication.credentials}&characters=#{character}&orderBy=-focDate&limit=#{per_page}&offset=#{offset}")
