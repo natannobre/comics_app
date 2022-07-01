@@ -6,8 +6,6 @@ class Character
     endpoint = '/v1/public/characters'
 
     name = name.downcase
-    # response = HTTParty.get("#{MarvelAuthentication.base_url}#{endpoint}?#{MarvelAuthentication.credentials}&name=#{name}")
-    # response_body = JSON.parse(response.body)
 
     response_body = Rails.cache.fetch(["character_by_name", name], expires_in: 24.hours) do
       response = HTTParty.get("#{MarvelAuthentication.base_url}#{endpoint}?#{MarvelAuthentication.credentials}&name=#{name}")
