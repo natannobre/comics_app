@@ -1,18 +1,26 @@
 # Project setup guidelines
-### Configuration
-  - Ruby version: 3.0.2
-  - Rails version: 7.0.3
 ### Download the project
 ```shell
 git clone git@github.com:natannobre/comics_app.git
 ```
+### Configuration
+  - Ruby version: 3.0.2
+  - Rails version: 7.0.3
 
+  - Install gems:
+```shell
+gem install bundler
+bundle install
+```
 ### Create the file `comics_app/config/env_variables.yml`
 ```yaml
 MARVEL_PUBLIC_KEY: '<YOUR_PUBLIC_KEY>'
 MARVEL_PRIVATE_KEY: '<YOUR_PRIVATE_KEY>'
 ```
-
+## Migrate
+```shell
+bin/rails db:migrate
+```
 ### Allow caching in development
 Inside you project folder:
 ```shell
