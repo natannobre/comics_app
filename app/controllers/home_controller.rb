@@ -6,10 +6,12 @@ class HomeController < ApplicationController
     @comics_per_page = 25
 
     if session[:character_id].nil?
-      @comics = Comic.all(page: params[:page], per_page: @comics_per_page)
+      @comics = Marvel::Comic.all(page: params[:page], per_page: @comics_per_page)
     else
-      @comics = Comic.find_per_character(character: session[:character_id], page: params[:page], per_page: @comics_per_page)
+      @comics = Marvel::Comic.find_per_character(character: session[:character_id], page: params[:page], per_page: @comics_per_page)
     end
+
+    @favorites = Upvote.where(user_id: current_user.id, comic_id: @comics.map(&:id)).pluck(:comic_id).to_set
   end
 
   def next_page
@@ -27,8 +29,8 @@ class HomeController < ApplicationController
   def search_character
     session[:character_id] = nil
     if params[:name].present?
-      character = Character.find_by_name(params[:name])
-      session[:character_id] = character[:id] if character.present?
+      character = Marvel::Character.find_by_name(params[:name])
+      session[:character_id] = character.id if character.present?
     end
     redirect_to root_path
   end

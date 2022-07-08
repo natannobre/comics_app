@@ -1,9 +1,7 @@
 <%= render partial: "shared/top_menu" %>
 
 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-5 g-3">
-	<% @comics.each do |comic| %>
-		<%= render partial: "home/components/card", locals: { comic_id:comic[:id], image_src: comic[:path], title: comic[:title], favorite: Upvote.find_by(user_id:current_user.id, comic_id:comic[:id]).present? } %>
-	<% end %>
+  <%= render partial: 'home/components/comic', collection: @comics %>
 </div>
 <div class="mx-auto mt-4">
 	<nav>

@@ -1,15 +1,16 @@
-class Character
+class Marvel::Character
   include HTTParty
+
+  attr_accessor :id, :name, :path
 
   def self.find_by_name(name)
     # GET https://gateway.marvel.com/v1/public/characters -> fetches lists of characters
     endpoint = '/v1/public/characters'
-
     name = name.downcase
+    params = { name: name }
 
-    response_body = Rails.cache.fetch(["character_by_name", name], expires_in: 24.hours) do
-      response = HTTParty.get("#{MarvelAuthentication.base_url}#{endpoint}?#{MarvelAuthentication.credentials}&name=#{name}")
-      JSON.parse(response.body)
+    response_body = Rails.cache.fetch(['character_by_name', name], expires_in: 24.hours) do
+      Marvel::Base.get(endpoint, params)
     end
 
     build_character_infos(response_body['data']['results'][0]) if response_body['data']['results'].present?
@@ -22,11 +23,12 @@ class Character
   private_class_method def self.build_character_infos(character)
     path = build_image_path(character)
 
-    {
-      id: character['id'],
-      name: character['name'],
-      path: path
-    }
+    character_info = Marvel::Character.new
+    character_info.id = character['id']
+    character_info.name = character['name']
+    character_info.path = path
+
+    character_info
   end
 
   private_class_method def self.build_image_path(character)
